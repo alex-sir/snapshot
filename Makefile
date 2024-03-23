@@ -3,11 +3,15 @@ PROG = $(shell basename $(PWD))
 HDRS_IMPORTED =
 
 HDRS_HERE = \
-	src/snapshot.h
+	src/snapshot.h \
+	src/generate.h \
+	src/helpers.h
 
 SRCS = \
 	src/main.c \
-	src/snapshot.c
+	src/snapshot.c \
+	src/generate.c \
+	src/helpers.c
 
 OBJS = $(SRCS:.c=.o)
 
