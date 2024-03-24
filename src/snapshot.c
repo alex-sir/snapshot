@@ -13,16 +13,8 @@
 #include <sys/resource.h> // for setrlimit()
 
 /* TODO
- * - create a temp directory of name fn ($)
- * - create an executable copy of the binary code of the current running executable
- *   - the name of the executable is the basename(3) of progpath
  * - create a core dump of the current program
- * - create a README.txt file containing the contents of the readme string
- *   - if readme doesn't end in '\n', append it to the file
  * - create a tarball containing the executable, core dump, and README.txt
- * - remove the temp directory of name fn
- *   - first, remove all the files within it
- *   - then, remove the directory
  */
 
 int snapshot(char *fn, char *progpath, char *readme)
@@ -42,9 +34,13 @@ int snapshot(char *fn, char *progpath, char *readme)
 
     const char *progname = basename(progpath);
     char executable_copy_path[PATHNAME_MAX];
+    char readme_path[PATHNAME_MAX];
     snprintf(executable_copy_path, sizeof(executable_copy_path), "%s/%s", fn, progname);
-    
-    if (create_executable_copy(executable_copy_path) == -1)
+    snprintf(readme_path, sizeof(readme_path), "%s/README.txt", fn);
+
+    // create all the files for the temp directory
+    if (create_executable_copy(executable_copy_path) == -1 ||
+        create_readme(readme_path, readme) == -1)
     {
         print_err();
         return -1;
@@ -54,7 +50,7 @@ int snapshot(char *fn, char *progpath, char *readme)
      * - within the child process, raise(3) the SIGABRT signal
      */
 
-    if (remove_temp_dir(fn, executable_copy_path) == -1) // remove temp directory
+    if (remove_temp_dir(fn) == -1) // remove temp directory
     {
         print_err();
         return -1;
