@@ -16,7 +16,14 @@
 
 #define PATHNAME_MAX pathconf(".", _PC_PATH_MAX) + 1 // max size of a file pathname
 
-extern int create_executable_copy(const char *progname, const char *dirname);
-extern int remove_files(const char *progname, const char *dirname);
+/**
+ * @brief create an executable file copy of the current running program's executable file
+ *
+ * @param progname name of the current running program
+ * @param dirname name of the directory where the executable file copy is stored
+ * @return int 0 = successful copy | -1 = error occurred
+ */
+extern int create_executable_copy(const char *executable_copy_path);
+extern int remove_temp_dir(const char *dirpath, const char *executable_copy_path);
 
 #endif

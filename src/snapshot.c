@@ -41,15 +41,20 @@ int snapshot(char *fn, char *progpath, char *readme)
     }
 
     const char *progname = basename(progpath);
-    create_executable_copy(progname, fn);
-
+    char executable_copy_path[PATHNAME_MAX];
+    snprintf(executable_copy_path, sizeof(executable_copy_path), "%s/%s", fn, progname);
+    
+    if (create_executable_copy(executable_copy_path) == -1)
+    {
+        print_err();
+        return -1;
+    }
     /* TODO: create the core dump file
      * - fork(2) the current process to create a child process
      * - within the child process, raise(3) the SIGABRT signal
      */
 
-    remove_files(progname, fn);
-    if (remove(fn) == -1) // remove temp directory
+    if (remove_temp_dir(fn, executable_copy_path) == -1) // remove temp directory
     {
         print_err();
         return -1;
