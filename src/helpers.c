@@ -8,5 +8,5 @@
 
 void print_err(void)
 {
-    fprintf(stderr, "%s\n", strerror(errno));
+    fprintf(stderr, "Error: %s\n", strerror(errno));
 }
