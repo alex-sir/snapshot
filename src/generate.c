@@ -119,7 +119,7 @@ int create_tarball(const char *ssname)
     const int tarball_command_size = FILENAME_MAX + PATHNAME_MAX + 12;
     char tarball_command[tarball_command_size];
     snprintf(tarball_name, sizeof(tarball_name), "%s.tgz", ssname);
-    snprintf(tarball_command, sizeof(tarball_command), "tar -czf %s %s", tarball_name, ssname);
+    snprintf(tarball_command, sizeof(tarball_command), "tar -czvf %s %s", tarball_name, ssname);
     if (system(tarball_command) == -1)
     {
         return -1;
