@@ -64,9 +64,15 @@ int create_readme(const char *ssname, const char *readme)
     }
     int bytes_written = 0;
 
+    bytes_written = write(readme_file, readme, strlen(readme));
+    if (bytes_written == -1)
+    {
+        close(readme_file);
+        return -1;
+    }
     if (readme[strlen(readme) - 1] != '\n') // readme does not end in a newline
     {
-        bytes_written = write(readme_file, readme, strlen(readme));
+        bytes_written = write(readme_file, "\n", 1); // add the newline
         if (bytes_written == -1)
         {
             close(readme_file);
@@ -88,7 +94,7 @@ int create_core(const char *ssname)
     }
     else if (childpid == 0) // in child
     {
-        abort();
+        abort(); // create the core dump file
     }
     else // child forked successfully
     {
@@ -100,6 +106,21 @@ int create_core(const char *ssname)
     snprintf(core_name, sizeof(core_name), "core.%d", childpid);
     snprintf(core_path, sizeof(core_path), "%s/core", ssname);
     if (rename(core_name, core_path) == -1) // move the core file to the temp directory
+    {
+        return -1;
+    }
+
+    return 0;
+}
+
+int create_tarball(const char *ssname)
+{
+    char tarball_name[FILENAME_MAX];
+    const int tarball_command_size = FILENAME_MAX + PATHNAME_MAX + 12;
+    char tarball_command[tarball_command_size];
+    snprintf(tarball_name, sizeof(tarball_name), "%s.tgz", ssname);
+    snprintf(tarball_command, sizeof(tarball_command), "tar -czf %s %s", tarball_name, ssname);
+    if (system(tarball_command) == -1)
     {
         return -1;
     }

@@ -8,8 +8,8 @@
 #define GENERATE
 
 #include <stdio.h>    // for snprintf(), remove(), rename()
-#include <stdlib.h>   // for malloc(), abort()
-#include <string.h>   // for strlen(), strcmp(), strsignal()
+#include <stdlib.h>   // for malloc(), abort(), system()
+#include <string.h>   // for strlen(), strcmp()
 #include <unistd.h>   // for pathconf(), getpid(), read(), write(), close(), fork()
 #include <fcntl.h>    // for open()
 #include <dirent.h>   // for opendir(), closedir(), readdir()
@@ -42,6 +42,13 @@ extern int create_readme(const char *ssname, const char *readme);
  * @return int 0 = successful creation | -1 = error occurred
  */
 extern int create_core(const char *ssname);
+/**
+ * @brief create a tarball of a directory
+ *
+ * @param ssname name of the directory to create a tarball of
+ * @return int 0 = successful creation | -1 = error occurred
+ */
+extern int create_tarball(const char *ssname);
 /**
  * @brief remove a temporary directory
  *
