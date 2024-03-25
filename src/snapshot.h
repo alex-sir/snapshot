@@ -1,1 +1,1 @@
-extern int snapshot(char *fn, char *progpath, char *readme);
+extern int snapshot(char *ssname, char *progpath, char *readme);

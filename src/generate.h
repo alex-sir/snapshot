@@ -7,12 +7,13 @@
 #ifndef GENERATE
 #define GENERATE
 
-#include <stdio.h>  // for snprintf(), remove()
-#include <stdlib.h> // for malloc()
-#include <string.h> // for strlen(), strcmp()
-#include <unistd.h> // for pathconf(), getpid(), read(), write(), close()
-#include <fcntl.h>  // for open()
-#include <dirent.h> // for opendir(), closedir(), readdir()
+#include <stdio.h>    // for snprintf(), remove(), rename()
+#include <stdlib.h>   // for malloc(), abort()
+#include <string.h>   // for strlen(), strcmp(), strsignal()
+#include <unistd.h>   // for pathconf(), getpid(), read(), write(), close(), fork()
+#include <fcntl.h>    // for open()
+#include <dirent.h>   // for opendir(), closedir(), readdir()
+#include <sys/wait.h> // for wait()
 
 #include "helpers.h"
 
@@ -21,24 +22,32 @@
 /**
  * @brief create an executable file copy of the current running program's executable file
  *
- * @param executable_copy_path path to the executable file copy
+ * @param ssname path to the directory where the executable file copy is stored
+ * @param progname name of the current running program's executable file
  * @return int 0 = successful copy | -1 = error occurred
  */
-extern int create_executable_copy(const char *executable_copy_path);
+extern int create_executable_copy(const char *ssname, const char *progname);
 /**
  * @brief create a README.txt file containing the contents of readme
  *
- * @param readme_path path to the README.txt file
+ * @param ssname path to the directory where README.txt is stored
  * @param readme content copied into README.txt
  * @return int 0 = successful creation | -1 = error occurred
  */
-extern int create_readme(const char *readme_path, const char *readme);
+extern int create_readme(const char *ssname, const char *readme);
+/**
+ * @brief create a core dump file of the current program
+ *
+ * @param ssname path to the directory where the core dump file is stored
+ * @return int 0 = successful creation | -1 = error occurred
+ */
+extern int create_core(const char *ssname);
 /**
  * @brief remove a temporary directory
  *
- * @param dirpath path to the temporary directory
+ * @param ssname path to the temporary directory
  * @return int 0 = successful removal | -1 = error occurred
  */
-extern int remove_temp_dir(const char *dirpath);
+extern int remove_temp_dir(const char *ssname);
 
 #endif
