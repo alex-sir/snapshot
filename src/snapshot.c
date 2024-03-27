@@ -4,12 +4,13 @@
  *  snapshot
  */
 
-#include "generate.h"
-#include "helpers.h"
-
 #include <libgen.h>       // for basename()
 #include <sys/stat.h>     // for mkdir()
 #include <sys/resource.h> // for setrlimit()
+
+#include "snapshot.h"
+#include "generate.h"
+#include "helpers.h"
 
 int snapshot(char *ssname, char *progpath, char *readme)
 {
