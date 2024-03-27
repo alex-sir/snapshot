@@ -7,11 +7,12 @@
 #ifndef HELPERS
 #define HELPERS
 
-#include <stdio.h>  // for fprintf(), snprintf()
-#include <string.h> // for strerror(), strncpy(), strstr()
-#include <errno.h>  // for errno
-#include <unistd.h> // for read(), write(), close()
-#include <dirent.h> // for opendir(), closedir(), readdir()
+#include <stdio.h>     // for fprintf(), snprintf()
+#include <string.h>    // for strerror(), strncpy(), strstr()
+#include <errno.h>     // for errno
+#include <unistd.h>    // for read(), write(), close()
+#include <dirent.h>    // for opendir(), closedir(), readdir()
+#include <sys/types.h> // for pid_t
 
 /**
  * @brief print an error message
@@ -30,8 +31,9 @@ extern int copy_file_data(const int executable, const int executable_copy);
  *
  * @param core_name string containing the name of the core dump file
  * @param core_name_size size of the string core_name
+ * @param corepid PID of the core dump file
  * @return int 0 = successfully set name | -1 = error occurred
  */
-extern int set_core_name(char *core_name, const int core_name_size);
+extern int set_core_name(char *core_name, const size_t core_name_size, const pid_t corepid);
 
 #endif

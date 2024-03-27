@@ -13,7 +13,7 @@ void print_err(void)
 
 int copy_file_data(const int file_from, const int file_to)
 {
-    const int BUFFER_SIZE = 2048;
+    const size_t BUFFER_SIZE = 2048;
     char buffer[BUFFER_SIZE];
     int bytes_read = 0, bytes_written = 0;
     // copy all bytes from file_from and write them to file_to
@@ -34,7 +34,7 @@ int copy_file_data(const int file_from, const int file_to)
     return 0;
 }
 
-int set_core_name(char *core_name, const int core_name_size)
+int set_core_name(char *core_name, const size_t core_name_size, const pid_t corepid)
 {
     snprintf(core_name, core_name_size, "core");
 
@@ -46,11 +46,13 @@ int set_core_name(char *core_name, const int core_name_size)
         return -1;
     }
     struct dirent *entry;
+    char corepid_str[8];
+    snprintf(corepid_str, sizeof(corepid_str), "%d", corepid);
     errno = 0;
     while ((entry = readdir(dir)))
     {
-        // check if the core dump file exists with a suffix (core.*)
-        if (strstr(entry->d_name, "core.") != NULL)
+        // check if the core dump file exists with a suffix (core.*) containing a PID
+        if (strstr(entry->d_name, "core.") != NULL && strstr(entry->d_name, corepid_str) != NULL)
         {
             strncpy(core_name, entry->d_name, core_name_size);
             break;

@@ -86,10 +86,10 @@ int create_core(const char *ssname)
         childpid = wait(NULL);
     }
 
-    const int core_name_size = FILENAME_MAX;
+    const size_t core_name_size = FILENAME_MAX;
     char core_name[core_name_size];
     char core_path[PATHNAME_MAX];
-    if (set_core_name(core_name, core_name_size) == -1)
+    if (set_core_name(core_name, core_name_size, childpid) == -1)
     {
         return -1;
     }
@@ -106,7 +106,7 @@ int create_core(const char *ssname)
 int create_tarball(const char *ssname)
 {
     char tarball_name[FILENAME_MAX];
-    const int tarball_command_size = FILENAME_MAX + PATHNAME_MAX + 12;
+    const size_t tarball_command_size = FILENAME_MAX + PATHNAME_MAX + 12;
     char tarball_command[tarball_command_size];
     snprintf(tarball_name, sizeof(tarball_name), "%s.tgz", ssname);
     snprintf(tarball_command, sizeof(tarball_command), "tar -czvf %s %s", tarball_name, ssname);
