@@ -32,26 +32,26 @@ If the output is not ```core```, you can set your system to generate the core du
 
 1. Temporary solution:
 
-``` bash
-sudo sysctl -w kernel.core_pattern=core
-```
+    ``` bash
+    sudo sysctl -w kernel.core_pattern=core
+    ```
 
 2. Permanent solution:
 
-Open /etc/sysctl.conf with root priviliges:
+    Open /etc/sysctl.conf with root privileges:
 
-``` bash
-sudo vim /etc/sysctl.conf
-```
+    ``` bash
+    sudo vim /etc/sysctl.conf
+    ```
 
-Add (or modify) the following:
+    Add (or modify) the following:
 
-``` bash
-kernel.core_pattern = core
-```
+    ``` bash
+    kernel.core_pattern = core
+    ```
 
-Reload the configuration on your system (or reboot your system):
+    Reload the configuration on your system (or reboot your system):
 
-``` bash
-sudo sysctl -p
-```
+    ``` bash
+    sudo sysctl -p
+    ```

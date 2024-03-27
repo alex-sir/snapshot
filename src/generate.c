@@ -25,27 +25,12 @@ int create_executable_copy(const char *ssname, const char *progname)
         return -1;
     }
 
-    const int BUFFER_SIZE = 2048;
-    char buffer[BUFFER_SIZE];
-    int bytes_read = 0, bytes_written = 0;
-    // copy all bytes from executable and write them to executable_copy
-    do
+    if (copy_file_data(executable, executable_copy) == -1)
     {
-        bytes_read = read(executable, buffer, BUFFER_SIZE);
-        if (bytes_read == -1)
-        {
-            close(executable);
-            close(executable_copy);
-            return -1;
-        }
-        bytes_written = write(executable_copy, buffer, bytes_read);
-        if (bytes_written == -1)
-        {
-            close(executable);
-            close(executable_copy);
-            return -1;
-        }
-    } while (bytes_read);
+        close(executable);
+        close(executable_copy);
+        return -1;
+    }
 
     close(executable);
     close(executable_copy);
@@ -118,32 +103,6 @@ int create_core(const char *ssname)
     return 0;
 }
 
-int set_core_name(char *core_name, const int core_name_size)
-{
-    snprintf(core_name, core_name_size, "core");
-
-    // determine if the core dump filename is not just "core" and contains a suffix
-    DIR *dir;
-    dir = opendir(".");
-    if (dir == NULL)
-    {
-        return -1;
-    }
-    struct dirent *entry;
-    while ((entry = readdir(dir)))
-    {
-        // check if the core dump file exists with a suffix (core.*)
-        if (strstr(entry->d_name, "core.") != NULL)
-        {
-            strncpy(core_name, entry->d_name, core_name_size);
-            break;
-        }
-    }
-    closedir(dir);
-
-    return 0;
-}
-
 int create_tarball(const char *ssname)
 {
     char tarball_name[FILENAME_MAX];
@@ -171,6 +130,7 @@ int remove_temp_dir(const char *ssname)
     char file_path[PATHNAME_MAX];
     struct dirent *entry;
     // remove all the files in the directory
+    errno = 0;
     while ((entry = readdir(dir)))
     {
         if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0)
@@ -181,6 +141,10 @@ int remove_temp_dir(const char *ssname)
         remove(file_path);
     }
     closedir(dir);
+    if (errno != 0) // error occurred in readdir()
+    {
+        return -1;
+    }
 
     if (remove(ssname) == -1) // remove the directory
     {
