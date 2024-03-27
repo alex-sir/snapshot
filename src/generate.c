@@ -101,18 +101,45 @@ int create_core(const char *ssname)
         childpid = wait(NULL);
     }
 
-    char core_name[FILENAME_MAX];
+    const int core_name_size = FILENAME_MAX;
+    char core_name[core_name_size];
     char core_path[PATHNAME_MAX];
-    snprintf(core_name, sizeof(core_name), "core.%d", childpid);
-    if (access(core_name, F_OK) == -1) // check if the core dump file exists with the PID suffix (core.PID)
+    if (set_core_name(core_name, core_name_size) == -1)
     {
-        strncpy(core_name, "core", sizeof(core_name));
+        return -1;
     }
     snprintf(core_path, sizeof(core_path), "%s/core", ssname);
+
     if (rename(core_name, core_path) == -1) // move the core file to the temp directory
     {
         return -1;
     }
+
+    return 0;
+}
+
+int set_core_name(char *core_name, const int core_name_size)
+{
+    snprintf(core_name, core_name_size, "core");
+
+    // determine if the core dump filename is not just "core" and contains a suffix
+    DIR *dir;
+    dir = opendir(".");
+    if (dir == NULL)
+    {
+        return -1;
+    }
+    struct dirent *entry;
+    while ((entry = readdir(dir)))
+    {
+        // check if the core dump file exists with a suffix (core.*)
+        if (strstr(entry->d_name, "core.") != NULL)
+        {
+            strncpy(core_name, entry->d_name, core_name_size);
+            break;
+        }
+    }
+    closedir(dir);
 
     return 0;
 }

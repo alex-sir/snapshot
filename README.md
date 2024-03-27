@@ -15,11 +15,12 @@ Generate a "snapshot" tarball of a running program for debugging.
 
 ## Notes
 
+* The core dump will be renamed to ```core``` within the tarball.
+
 Snapshot expects the core dump file it generates to be located in the directory where **snapshot()** is called. Depending on your system configuration settings, the core dump might be generated elsewhere.
 
 **NOTICE: Snapshot will NOT work as expected if the core dump is not generated in the directory where snapshot() is called**.
 
-The core dump filename should also be in the format ```core``` or ```core.PID```.
 
 Check the core dump configuration settings on your system with:
 
