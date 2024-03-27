@@ -9,8 +9,8 @@
 
 #include <stdio.h>    // for snprintf(), remove(), rename()
 #include <stdlib.h>   // for malloc(), abort(), system()
-#include <string.h>   // for strlen(), strcmp()
-#include <unistd.h>   // for pathconf(), getpid(), read(), write(), close(), fork()
+#include <string.h>   // for strlen(), strcmp(), strncpy()
+#include <unistd.h>   // for pathconf(), getpid(), read(), write(), close(), fork(), access()
 #include <fcntl.h>    // for open()
 #include <dirent.h>   // for opendir(), closedir(), readdir()
 #include <sys/wait.h> // for wait()

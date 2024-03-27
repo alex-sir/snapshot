@@ -104,6 +104,10 @@ int create_core(const char *ssname)
     char core_name[FILENAME_MAX];
     char core_path[PATHNAME_MAX];
     snprintf(core_name, sizeof(core_name), "core.%d", childpid);
+    if (access(core_name, F_OK) == -1) // check if the core dump file exists with the PID suffix (core.PID)
+    {
+        strncpy(core_name, "core", sizeof(core_name));
+    }
     snprintf(core_path, sizeof(core_path), "%s/core", ssname);
     if (rename(core_name, core_path) == -1) // move the core file to the temp directory
     {

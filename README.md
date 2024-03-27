@@ -19,14 +19,38 @@ Snapshot expects the core dump file it generates to be located in the directory 
 
 **NOTICE: Snapshot will NOT work as expected if the core dump is not generated in the directory where snapshot() is called**.
 
+The core dump filename should also be in the format ```core``` or ```core.PID```.
+
 Check the core dump configuration settings on your system with:
 
 ``` bash
 cat /proc/sys/kernel/core_pattern
 ```
 
-If the output is not ```core```, you can set your system to generate the core dump in the current directory with:
+If the output is not ```core```, you can set your system to generate the core dump in the current directory in 2 ways:
+
+1. Temporary solution:
 
 ``` bash
 sudo sysctl -w kernel.core_pattern=core
+```
+
+2. Permanent solution:
+
+Open /etc/sysctl.conf with root priviliges:
+
+``` bash
+sudo vim /etc/sysctl.conf
+```
+
+Add (or modify) the following:
+
+``` bash
+kernel.core_pattern = core
+```
+
+Reload the configuration on your system (or reboot your system):
+
+``` bash
+sudo sysctl -p
 ```
